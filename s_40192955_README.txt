@@ -1,0 +1,95 @@
+     Plagiarism detection tool using Rabin-Karp Algorithm for normal text documents and cosine similarity for source code.
+
+-> At first out tool will identify that type of given input file, whether  it is source code (ex. Java, C++, C or Python) or text file.
+This can be done by identifying specific keywords such as "import java." in Java, "#inlcude " in C or Cpp, and "import [a-b]+" in Python.
+
+-> After indetifying the type of file, we will have total four choices;
+    (1) both files are source code -> we will use Cosine similarity to detect plagiarism.
+    (2) file 1 is text file but file 2 is source code -> we can directly conclude that there is no plagiarism between both files.
+    (3) file 1 is source file but file 2 is text code -> we can directly conclude that there is no plagiarism between both files.
+    (4) both files are text file -> we will use Rabin-Karp Algorithm to detect plagiarism.
+
+-> Preprocessing for case (1)
+    We will at first remove multiple spaces and then we will remove punctuation.
+-> Preprocessing for case (2)
+    We will at first remove multiple spaces and then we will remove single line comments and block comments as well.
+
+Rabin-Karp Algorithm:
+For the objective of precisely matching a pattern string within a text, this approach utilizes hashing.
+It swiftly filters out text positions that cannot match the pattern using a rolling hash, and then it checks the remaining text positions for matches.
+
+Algorithm: Rabin-Karp string search algorithm
+    Data:   P: The pattern to look for
+            T: The text to look in
+            hashT, hashP: Rolling Hash structures for strings T, P
+    Result: Returns true if P in T
+    n < length (T)
+    k < length (P)
+    for i < 0 to n - k do
+        textHash <- hashT.getHash(i,i+ k -1)
+        patternHash <- hashP.getHash (0, k - 1)
+            if textHash = patternHash then
+                for j * 0 to k - 1 do
+                    if P[j]!= T[i + j] then
+                        break
+                    end
+                end
+             end
+            if (j = k)
+                return true
+            end
+           if (i = n - k)
+                break
+           end
+    end
+    return false
+
+Cosine Similarity:
+Cosine Similarity tends to determine how similar two words, sentences and documents. Cosine similarity can be used to detect plagiarism.
+Data objects in a dataset are considered as a vector for cosine similarity.
+
+  Cos(x, y) = x . y / ||x|| * ||y||
+  where,
+
+  x . y = product (dot) of the vectors ‘x’ and ‘y’.
+  ||x|| and ||y|| = length of the two vectors ‘x’ and ‘y’.
+  ||x|| * ||y|| = cross product of the two vectors ‘x’ and ‘y’.
+
+
+Trie Data Structure:
+-Trie Data Structure is tree data structure used for locating specific keys from within a set. These keys are most often strings, with links between nodes defined not by the entire key, but by individual characters. In order to access a key (to recover its value, change it, or remove it), the trie is traversed depth-first, following the links between nodes, which represent each character in the key.
+-Trie's nodes are made up of many branches at each node. Every branch indicates a potential key character. Each key's final node should be noted as the word node's conclusion. To identify a node as the word's end, a Trie node field called isEndOfWord is used.
+- We use this data structure to store the pattern that has been already found in file data, so that if the same pattern occur in future then we can return true by searching in Trie in constant time and we do not need to search in the whole file.
+
+structure Node
+   Children Node[Alphabet-Size]
+   Is-Terminal Boolean
+   Value Data-Type
+ end structure
+
+Trie-Find(x, key)
+   for 0 ≤ i < key.length do
+     if x.Children[key[i]] = nil then
+       return false
+     end if
+     x := x.Children[key[i]]
+   repeat
+   return x.Value
+
+Trie-Insert(x, key, value)
+   for 0 ≤ i < key.length do
+      if x.Children[key[i]] = nil then
+         x.Children[key[i]] := Node()
+      end if
+      x := x.Children[key[i]]
+   repeat
+   x.Value := value
+   x.Is-Terminal := True
+
+->Total Time Complexity of the Plagiarism Detection Tool will be O(m*n), where m is the string size of file 1 and n is the string size of file 2.
+
+REFERENCES:
+-> https://www.baeldung.com/cs/rabin-karp-algorithm
+-> https://www.geeksforgeeks.org/cosine-similarity/
+-> https://github.com/zhixiangli/code-similarity
+-> https://en.wikipedia.org/wiki/Trie
